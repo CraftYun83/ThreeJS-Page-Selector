@@ -103,6 +103,26 @@
                 
             scene.add(txt5);
 
+            var textgeometry5 = new TextGeometry( 'These links dont work', {
+                font: font,
+                size: 1.4,
+                height: 1,
+                curveSegments: 12,
+                bevelEnabled: false,
+                bevelThickness: 0.1,
+                bevelSize: 0.1,
+                bevelSegments: 0.1
+            } );
+            var txt_mat5 = new THREE.MeshBasicMaterial({color:0xcbcbcb});
+            var txt5 = new THREE.Mesh(textgeometry5, txt_mat5);
+            txt5.position.y = 12
+            txt5.position.z = -4
+            txt5.position.x = 100
+            txt5.position.x = 1
+            txt5.rotation.y = -1
+                
+            scene.add(txt5);
+
             var textgeometry1 = new TextGeometry( 'Contact', {
                 font: font,
                 size: 1.4,
