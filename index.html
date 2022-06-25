@@ -4,25 +4,44 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <style>
-        body { margin: 0; background-color: #444751; max-width: 100%;}
+        body { 
+            margin: 0; 
+            background-color: #444751; 
+            max-width: 100%;
+        }
         h1 {
             color: white;
-            font-size: 100px;
+            font-size: 35px;
             font-family: sans-serif;
         }
-        div {
+
+        div#preview {
+            margin: 0;
             position: absolute;
-            top: 0;
-            left: 10%;
-            min-height: 100%;
+            top: 50%;
+            right: 1%;
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+            justify-content: right;
+            width: 30%;
+            text-align: center;
+        }
+        div#preview img{
+            width: 50%;
+            border: 5px solid white;
         }
     </style>
 </head>
 <body>
+    <div id="preview">
+        <h1>Built Using</h1>
+        <img src="images/threejs.png" alt="">
+    </div>
     <script src="js/three.js"></script>
     <script src="js/threex.domevents.js"></script>
     <script type="module" src="js/TextGeometry.js"></script>
     <script type="module" src="js/FontLoader.js"></script>
+    <script type="mdule" src="js/TrackballControls.js"></script>
     <script type="module">
         import {TextGeometry} from "./js/TextGeometry.js"
         import {FontLoader} from "./js/FontLoader.js"
@@ -30,7 +49,6 @@
         const scene = new THREE.Scene();
         scene.background = new THREE.Color( 0x444751 );
         const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-
         const renderer = new THREE.WebGLRenderer({antialias: true});
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -62,66 +80,40 @@
         var rec1intersect = false;
         var rec2intersect = false;
         var rec3intersect = false;
-        var rec4intersect = false;  
+        var rec4intersect = false;
+        var txt1intersect = false;
+        var txt2intersect = false;
+        var txt3intersect = false;
+        var txt4intersect = false;  
+
+        var anyhighlighted = false;
 
         rec2.position.y = 2
         rec3.position.y = 4
         rec4.position.y = 6
 
-        camera.position.z = 13;
-        camera.position.y = 10;
-        camera.position.x = -10;
-        camera.rotation.x = -0.5;
-        camera.rotation.z = -0.3;
-        camera.rotation.y = -0.8;
-
         light.position.set(camera.position);
+
+
+        // --------------------
+
+        domEvents.addEventListener(rec1, "mouseover", () => { rec1intersect = true; })
+        domEvents.addEventListener(rec1, "mouseout", () => { rec1intersect = false; })
+
+        domEvents.addEventListener(rec2, "mouseover", () => { rec2intersect = true; })
+        domEvents.addEventListener(rec2, "mouseout", () => { rec2intersect = false; })
+
+        domEvents.addEventListener(rec3, "mouseover", () => { rec3intersect = true; })
+        domEvents.addEventListener(rec3, "mouseout", () => { rec3intersect = false; })
+
+        domEvents.addEventListener(rec4, "mouseover", () => { rec4intersect = true; })
+        domEvents.addEventListener(rec4, "mouseout", () => { rec4intersect = false; })
 
         // --------------------
 
         var loader = new FontLoader();
 
         loader.load('./helvetiker_regular.typeface.json',function(font){
-
-            var textgeometry5 = new TextGeometry( 'I have no friends :(', {
-                font: font,
-                size: 1.4,
-                height: 1,
-                curveSegments: 12,
-                bevelEnabled: false,
-                bevelThickness: 0.1,
-                bevelSize: 0.1,
-                bevelSegments: 0.1
-            } );
-            var txt_mat5 = new THREE.MeshBasicMaterial({color:0xcbcbcb});
-            var txt5 = new THREE.Mesh(textgeometry5, txt_mat5);
-            txt5.position.y = 10
-            txt5.position.z = -2
-            txt5.position.x = 100
-            txt5.position.x = 1
-            txt5.rotation.y = -1
-                
-            scene.add(txt5);
-
-            var textgeometry5 = new TextGeometry( 'These links dont work', {
-                font: font,
-                size: 1.4,
-                height: 1,
-                curveSegments: 12,
-                bevelEnabled: false,
-                bevelThickness: 0.1,
-                bevelSize: 0.1,
-                bevelSegments: 0.1
-            } );
-            var txt_mat5 = new THREE.MeshBasicMaterial({color:0xcbcbcb});
-            var txt5 = new THREE.Mesh(textgeometry5, txt_mat5);
-            txt5.position.y = 12
-            txt5.position.z = -4
-            txt5.position.x = 100
-            txt5.position.x = 1
-            txt5.rotation.y = -1
-                
-            scene.add(txt5);
 
             var textgeometry1 = new TextGeometry( 'Contact', {
                 font: font,
@@ -136,14 +128,13 @@
             var txt_mat = new THREE.MeshBasicMaterial({color:0xcbcbcb});
             var txt1 = new THREE.Mesh(textgeometry1, txt_mat);
             txt1.position.z += 0.1
-            txt1.position.x -= 3.7
+            txt1.position.x -= 3.6
             txt1.position.y -= 0.6
             
             rec1.add(txt1);
 
-            domEvents.addEventListener(txt1, "mouseover", () => {rec1intersect = true; rec1.material.color.setHex(0x32a3ea)})
-            domEvents.addEventListener(txt1, "mouseout", () => {rec1intersect = false; rec1.material.color.setHex(0x2f3335)})
-
+            domEvents.addEventListener(txt1, "mouseover", () => { txt1intersect = true; })
+            domEvents.addEventListener(txt1, "mouseout", () => { txt1intersect = false; })
 
             var textgeometry2 = new TextGeometry( 'About Me', {
                 font: font,
@@ -157,13 +148,13 @@
             } );
             var txt2 = new THREE.Mesh(textgeometry2, txt_mat);
             txt2.position.z += 0.1
-            txt2.position.x -= 4
+            txt2.position.x -= 3.9
             txt2.position.y -= 0.6
             
             rec2.add(txt2);
 
-            domEvents.addEventListener(txt2, "mouseover", () => {rec2intersect = true; rec2.material.color.setHex(0x32a3ea)})
-            domEvents.addEventListener(txt2, "mouseout", () => {rec2intersect = false; rec2.material.color.setHex(0x2f3335)})
+            domEvents.addEventListener(txt2, "mouseover", () => { txt2intersect = true; })
+            domEvents.addEventListener(txt2, "mouseout", () => { txt2intersect = false; })
 
             var textgeometry3 = new TextGeometry( 'Projects', {
                 font: font,
@@ -177,13 +168,13 @@
             } );
             var txt3 = new THREE.Mesh(textgeometry3, txt_mat);
             txt3.position.z += 0.1
-            txt3.position.x -= 3.5
+            txt3.position.x -= 3.4
             txt3.position.y -= 0.6
             
             rec3.add(txt3);
 
-            domEvents.addEventListener(txt3, "mouseover", () => {rec3intersect = true; rec3.material.color.setHex(0x32a3ea)})
-            domEvents.addEventListener(txt3, "mouseout", () => {rec3intersect = false; rec3.material.color.setHex(0x2f3335)})
+            domEvents.addEventListener(txt3, "mouseover", () => {txt3intersect = true;})
+            domEvents.addEventListener(txt3, "mouseout", () => {txt3intersect = false;})
 
             var textgeometry4 = new TextGeometry( 'Home', {
                 font: font,
@@ -197,15 +188,18 @@
             } );
             var txt4 = new THREE.Mesh(textgeometry4, txt_mat);
             txt4.position.z += 0.1
-            txt4.position.x -= 3.1
+            txt4.position.x -= 2.6
             txt4.position.y -= 0.6
             
             rec4.add(txt4);
 
-            domEvents.addEventListener(txt4, "mouseover", () => {rec4intersect = true; rec4.material.color.setHex(0x32a3ea)})
-            domEvents.addEventListener(txt4, "mouseout", () => {rec4intersect = false; rec4.material.color.setHex(0x2f3335)})
+            domEvents.addEventListener(txt4, "mouseover", () => {txt4intersect = true;})
+            domEvents.addEventListener(txt4, "mouseout", () => {txt4intersect = false;})
         })
 
+        // --------------------
+        // Intersect: rec3.material.color.setHex(0x32a3ea)
+        // Normal: rec4.material.color.setHex(0x2f3335)
         // --------------------
 
         rec1.receiveShadow = true;
@@ -222,40 +216,58 @@
         scene.add( rec3 );
         scene.add( rec4 );
 
+        camera.position.x = -1.8662874327764594;
+        camera.position.y = 5.495582865373693;
+        camera.position.z = 10.451758501211435;
+        camera.rotation.x = -0.19683223898040414;
+        camera.rotation.y = -0.6046704081680452;
+        camera.rotation.z = -0.00394647046439155;
+
+        var currentimg = ""
+
         function animate() {
             requestAnimationFrame( animate );
 
-            if (rec1intersect) {
+            if (rec1intersect || txt1intersect) {
                 rec1.position.lerp(new THREE.Vector3(-1, 0, 0), 0.1);
+                rec1.material.color.setHex(0x32a3ea)
             } else {
                 rec1.position.lerp(new THREE.Vector3(0, 0, 0), 0.1);
+                rec1.material.color.setHex(0x2f3335)
             }
 
             ;
 
-            if (rec2intersect) {
+            if (rec2intersect || txt2intersect) {
                 rec2.position.lerp(new THREE.Vector3(-1, 2, 0), 0.1);
+                rec2.material.color.setHex(0x32a3ea)
             } else {
                 rec2.position.lerp(new THREE.Vector3(0, 2, 0), 0.1);
+                rec2.material.color.setHex(0x2f3335)
             }
 
             ;
 
-            if (rec3intersect) {
+            if (rec3intersect || txt3intersect) {
                 rec3.position.lerp(new THREE.Vector3(-1, 4, 0), 0.1);
+                rec3.material.color.setHex(0x32a3ea)
             } else {
                 rec3.position.lerp(new THREE.Vector3(0, 4, 0), 0.1);
+                rec3.material.color.setHex(0x2f3335)
             }
 
             ;
 
-            if (rec4intersect) {
+            if (rec4intersect || txt4intersect) {
                 rec4.position.lerp(new THREE.Vector3(-1, 6, 0), 0.1);
+                rec4.material.color.setHex(0x32a3ea)
             } else {
                 rec4.position.lerp(new THREE.Vector3(0, 6, 0), 0.1);
+                rec4.material.color.setHex(0x2f3335)
             }
 
             renderer.render( scene, camera );
+    
         }
         animate();
     </script>
